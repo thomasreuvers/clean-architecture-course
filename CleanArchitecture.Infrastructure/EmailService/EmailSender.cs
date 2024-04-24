@@ -8,16 +8,14 @@ namespace CleanArchitecture.Infrastructure.EmailService;
 
 public class EmailSender(IOptions<EmailSettings> emailSettings) : IEmailSender
 {
-    private readonly EmailSettings _emailSettings = emailSettings.Value;
-
     public async Task<bool> SendEmail(EmailMessage email)
     {
-        var client = new SendGridClient(_emailSettings.ApiKey);
+        var client = new SendGridClient(emailSettings.Value.ApiKey);
         var to = new EmailAddress(email.To);
         var from = new EmailAddress
         {
-            Email = _emailSettings.FromAddress,
-            Name = _emailSettings.FromName
+            Email = emailSettings.Value.FromAddress,
+            Name = emailSettings.Value.FromName
         };
 
         var message = MailHelper.CreateSingleEmail(from, to, email.Subject, email.Body, email.Body);
