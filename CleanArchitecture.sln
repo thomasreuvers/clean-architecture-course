@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Domain", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Application", "CleanArchitecture.Application\CleanArchitecture.Application.csproj", "{D96AAF45-E3E2-45A7-8F51-0086F63521DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Persistence", "CleanArchitecture.Persistence\CleanArchitecture.Persistence.csproj", "{89B45E6F-BDC4-4DFB-AAFB-D1F4DB7CA29B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Infrastructure", "CleanArchitecture.Infrastructure\CleanArchitecture.Infrastructure.csproj", "{2899545E-FEB5-4701-9707-9B87BD386905}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +32,8 @@ Global
 		{EC3D83F7-83FE-4406-94DA-309269A307B6} = {0D7A0A1E-B44A-4D36-AFAF-740FEB0D9F4D}
 		{83F06848-039C-4ADA-8316-E7139E19F4E4} = {ACC181D5-6F32-4EB5-8B9D-82DF8FDACE75}
 		{D96AAF45-E3E2-45A7-8F51-0086F63521DF} = {ACC181D5-6F32-4EB5-8B9D-82DF8FDACE75}
+		{89B45E6F-BDC4-4DFB-AAFB-D1F4DB7CA29B} = {A58A14CC-1C83-44AB-A026-454998629916}
+		{2899545E-FEB5-4701-9707-9B87BD386905} = {A58A14CC-1C83-44AB-A026-454998629916}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{83F06848-039C-4ADA-8316-E7139E19F4E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -38,5 +44,13 @@ Global
 		{D96AAF45-E3E2-45A7-8F51-0086F63521DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D96AAF45-E3E2-45A7-8F51-0086F63521DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D96AAF45-E3E2-45A7-8F51-0086F63521DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89B45E6F-BDC4-4DFB-AAFB-D1F4DB7CA29B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89B45E6F-BDC4-4DFB-AAFB-D1F4DB7CA29B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89B45E6F-BDC4-4DFB-AAFB-D1F4DB7CA29B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89B45E6F-BDC4-4DFB-AAFB-D1F4DB7CA29B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2899545E-FEB5-4701-9707-9B87BD386905}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2899545E-FEB5-4701-9707-9B87BD386905}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2899545E-FEB5-4701-9707-9B87BD386905}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2899545E-FEB5-4701-9707-9B87BD386905}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
