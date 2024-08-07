@@ -10,7 +10,7 @@ namespace CleanArchitecture.Infrastructure;
 
 public static class InfrastructureServicesRegistration
 {
-    public static IServiceCollection ConfigureInfrastructureServices(this IServiceCollection services,
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
         IConfiguration config)
     {
         services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
