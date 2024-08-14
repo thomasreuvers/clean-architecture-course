@@ -10,7 +10,7 @@ namespace CleanArchitecture.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class LeaveTypeController(IMediator mediator) : ControllerBase
+public class LeaveTypesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     public async Task<List<LeaveTypeDto>> Get()
