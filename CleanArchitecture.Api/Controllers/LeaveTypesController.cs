@@ -4,10 +4,12 @@ using CleanArchitecture.Application.Features.LeaveType.Commands.UpdateLeaveType;
 using CleanArchitecture.Application.Features.LeaveType.Queries.GetAllLeaveTypes;
 using CleanArchitecture.Application.Features.LeaveType.Queries.GetLeaveTypeDetails;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Api.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class LeaveTypesController(IMediator mediator) : ControllerBase

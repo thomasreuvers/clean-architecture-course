@@ -1,11 +1,19 @@
 using AutoMapper;
+using Blazored.LocalStorage;
 using CleanArchitecture.BlazorUI.Contracts;
 using CleanArchitecture.BlazorUI.Models.LeaveTypes;
 using CleanArchitecture.BlazorUI.Services.Base;
 
 namespace CleanArchitecture.BlazorUI.Services;
 
-public class LeaveTypeService(IClient client, IMapper mapper) : BaseHttpService(client), ILeaveTypeService
+public class LeaveTypeService(
+    IClient client, 
+    IMapper mapper,
+    ILocalStorageService localStorageService) 
+    : BaseHttpService(
+        client,
+        localStorageService),
+        ILeaveTypeService
 {
     public async Task<List<LeaveTypeVM>> GetLeaveTypes()
     {
@@ -23,6 +31,7 @@ public class LeaveTypeService(IClient client, IMapper mapper) : BaseHttpService(
     {
         try
         {
+            await AddBearerToken();
             var createLeaveTypeCommand = mapper.Map<CreateLeaveTypeCommand>(leaveType);
             await Client.LeaveTypesPOSTAsync(createLeaveTypeCommand);
             return new Response<Guid>
@@ -40,6 +49,7 @@ public class LeaveTypeService(IClient client, IMapper mapper) : BaseHttpService(
     {
         try
         {
+            await AddBearerToken();
             var updateLeaveTypeCommand = mapper.Map<UpdateLeaveTypeCommand>(leaveType);
             await Client.LeaveTypesPUTAsync(id.ToString(), updateLeaveTypeCommand);
             return new Response<Guid>
@@ -57,6 +67,7 @@ public class LeaveTypeService(IClient client, IMapper mapper) : BaseHttpService(
     {
         try
         {
+            await AddBearerToken();
             await Client.LeaveTypesDELETEAsync(id);
             return new Response<Guid>
             {
