@@ -15,6 +15,9 @@ public partial class Index
     public ILeaveTypeService LeaveTypeService { get; set; }
     
     [Inject]
+    public ILeaveAllocationService LeaveAllocationService { get; set; }
+    
+    [Inject]
     public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     
     public List<LeaveTypeVM> LeaveTypes { get; private set; }
@@ -28,7 +31,7 @@ public partial class Index
 
     protected void AllocateLeaveType(int id)
     {
-        // Use Leave Allocation Service here
+        LeaveAllocationService.CreateLeaveAllocation(id);
     }
 
     protected void EditLeaveType(int id)

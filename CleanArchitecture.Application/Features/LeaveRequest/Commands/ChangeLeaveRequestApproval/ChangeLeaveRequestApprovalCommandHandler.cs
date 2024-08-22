@@ -11,7 +11,8 @@ public class ChangeLeaveRequestApprovalCommandHandler(
     IMapper mapper,
     IEmailSender emailSender,
     ILeaveRequestRepository leaveRequestRepository,
-    ILeaveTypeRepository leaveTypeRepository) : IRequestHandler<ChangeLeaveRequestApprovalCommand, Unit>
+    ILeaveTypeRepository leaveTypeRepository,
+    ILeaveAllocationRepository leaveAllocationRepository) : IRequestHandler<ChangeLeaveRequestApprovalCommand, Unit>
 {
     
     public async Task<Unit> Handle(ChangeLeaveRequestApprovalCommand request, CancellationToken cancellationToken)
@@ -28,16 +29,32 @@ public class ChangeLeaveRequestApprovalCommandHandler(
         await leaveRequestRepository.UpdateAsync(leaveRequest);
         
         // If the request is approved, get and update the employee's allocations.
-        
-        // Send confirmation email
-        var email = new EmailMessage
+        if (request.Approved)
         {
-            To = string.Empty,
-            Body = $"Your leave request for {leaveRequest.StartDate:D} to {leaveRequest.EndDate:D} has been {(request.Approved ? "approved" : "rejected")}.",
-            Subject = "Leave Request Approval"
-        };
-        
-        await emailSender.SendEmail(email);
+            var daysRequested = (int)(leaveRequest.EndDate - leaveRequest.StartDate).TotalDays;
+            var allocation = await leaveAllocationRepository.GetUserAllocations(
+                leaveRequest.RequestingEmployeeId, leaveRequest.LeaveTypeId);
+            allocation.NumberOfDays -= daysRequested;
+            
+            await leaveAllocationRepository.UpdateAsync(allocation);
+        }
+
+        try
+        {
+            // Send confirmation email
+            var email = new EmailMessage
+            {
+                To = string.Empty,
+                Body = $"Your leave request for {leaveRequest.StartDate:D} to {leaveRequest.EndDate:D} has been {(request.Approved ? "approved" : "rejected")}.",
+                Subject = "Leave Request Approval"
+            };
+
+            await emailSender.SendEmail(email);
+        }
+        catch (Exception)
+        {
+            // Log Error
+        }
         
         return Unit.Value;
     }

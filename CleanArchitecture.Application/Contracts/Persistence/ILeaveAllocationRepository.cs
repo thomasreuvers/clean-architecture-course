@@ -9,5 +9,5 @@ public interface ILeaveAllocationRepository : IGenericRepository<LeaveAllocation
     Task<List<LeaveAllocation>> GetLeaveAllocationsWithDetails(string userId);
     Task<bool> AllocationExists(int leaveTypeId, string employeeId, int period);
     Task AddAllocations(List<LeaveAllocation> allocations);
-    Task<LeaveAllocation> GetEmployeeAllocationsByType(string employeeId, int leaveTypeId);
+    Task<LeaveAllocation> GetUserAllocations(string employeeId, int leaveTypeId);
 }

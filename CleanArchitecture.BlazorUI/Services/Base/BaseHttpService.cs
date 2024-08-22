@@ -3,13 +3,18 @@ using Blazored.LocalStorage;
 
 namespace CleanArchitecture.BlazorUI.Services.Base;
 
-public class BaseHttpService(
-    IClient client,
-    ILocalStorageService localStorageService)
+public class BaseHttpService
 {
-    protected IClient Client = client;
+    protected IClient Client;
+    protected readonly ILocalStorageService LocalStorageService;
 
-    protected Response<Guid> ConvertApiExceptions(ApiException ex)
+    public BaseHttpService(IClient client, ILocalStorageService localStorageService)
+    {
+        Client = client;
+        LocalStorageService = localStorageService;
+    }
+
+    protected Response<Guid> ConvertApiExceptions<Guid>(ApiException ex)
     {
         return ex.StatusCode switch
         {
@@ -31,12 +36,12 @@ public class BaseHttpService(
             }
         };
     }
-    
+
     protected async Task AddBearerToken()
     {
-        if(await localStorageService.ContainKeyAsync("token"))
-            client.HttpClient.DefaultRequestHeaders.Authorization = 
-                new AuthenticationHeaderValue("Bearer", 
-                    await localStorageService.GetItemAsync<string>("token"));
+        if (await LocalStorageService.ContainKeyAsync("token"))
+            Client.HttpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer",
+                    await LocalStorageService.GetItemAsync<string>("token"));
     }
 }

@@ -49,7 +49,7 @@ public class LeaveAllocationRepository(CaDatabaseContext context) : GenericRepos
         await SaveChangesAsync();
     }
 
-    public async Task<LeaveAllocation> GetEmployeeAllocationsByType(string employeeId, int leaveTypeId)
+    public async Task<LeaveAllocation> GetUserAllocations(string employeeId, int leaveTypeId)
     {
         return await context.LeaveAllocations.FirstOrDefaultAsync(q => q.EmployeeId == employeeId 
                                                                        && q.LeaveTypeId == leaveTypeId);

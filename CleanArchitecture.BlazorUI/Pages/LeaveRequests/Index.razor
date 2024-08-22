@@ -1,0 +1,101 @@
+@page "/leaverequests/"
+
+<h3>Index</h3>
+
+<div class="m-2 d-flex justify-content-end">
+    <a href="/leaverequests/create" class="btn btn-success">Add Leave Request</a>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-white bg-info" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title>">Total Leave Requests</h5>
+                <p class="card-text">@Model.TotalRequests</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title>">Pending Requests</h5>
+                <p class="card-text">@Model.PendingRequests</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title>">Approved Requests</h5>
+                <p class="card-text">@Model.ApprovedRequests</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title>">Rejected Requests</h5>
+                <p class="card-text">@Model.RejectedRequests</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+<br />
+
+<hr />
+<h1>Leave Request Log</h1>
+<hr />
+
+<table id="tblData" class="table">
+    <thead>
+    <tr>
+        <th>Employee Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Leave Type</th>
+        <th>Date Requested</th>
+        <th>Approval Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var leaveRequest in Model.LeaveRequests)
+    {
+        <tr>
+            <td>@leaveRequest.Employee.FirstName @leaveRequest.Employee.LastName</td>
+            <td>@leaveRequest.StartDate.Value.ToString("yyyy-MM-dd")</td>
+            <td>@leaveRequest.EndDate.Value.ToString("yyyy-MM-dd")</td>
+            <td>@leaveRequest.LeaveType</td>
+            <td>@leaveRequest.DateRequested.ToString("yyyy-MM-dd")</td>
+            <td>@if (leaveRequest.Cancelled)
+                {
+                    <span class="badge badge-secondary">Cancelled</span>
+                }
+                else
+                {
+                    switch (leaveRequest.Approved)
+                    {
+                        case true:
+                            <span class="badge badge-success">Approved</span>
+                            break;
+                        case false:
+                            <span class="badge badge-danger">Rejected</span>
+                            break;
+                        default:
+                            <span class="badge badge-warning">Pending</span>
+                            break;
+                    }
+                }</td>
+            <td>
+                @if (!leaveRequest.Cancelled)
+                {
+                    <button class="btn btn-outline-primary" @onclick="(() => GoToDetails(leaveRequest.Id))">
+                        <i class="fas fa-file"></i>Review
+                    </button>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

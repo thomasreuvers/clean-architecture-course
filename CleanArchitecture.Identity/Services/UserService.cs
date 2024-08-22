@@ -1,12 +1,15 @@
+using System.Security.Claims;
 using CleanArchitecture.Application.Contracts.Identity;
 using CleanArchitecture.Application.Models.Identity;
 using CleanArchitecture.Identity.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 namespace CleanArchitecture.Identity.Services;
 
 public class UserService(
-    UserManager<ApplicationUser> userManager
+    UserManager<ApplicationUser> userManager,
+    IHttpContextAccessor httpContextAccessor
     ) : IUserService
 {
     public async Task<List<Employee>> GetEmployees()
@@ -31,5 +34,10 @@ public class UserService(
             FirstName = employee.FirstName,
             LastName = employee.LastName
         };
+    }
+
+    public string UserId
+    {
+        get => httpContextAccessor.HttpContext?.User.FindFirstValue("uid");
     }
 }

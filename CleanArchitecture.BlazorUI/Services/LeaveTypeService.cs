@@ -17,12 +17,14 @@ public class LeaveTypeService(
 {
     public async Task<List<LeaveTypeVM>> GetLeaveTypes()
     {
+        await AddBearerToken();
         var leaveTypes = await Client.LeaveTypesAllAsync();
         return mapper.Map<List<LeaveTypeVM>>(leaveTypes);
     }
 
     public async Task<LeaveTypeVM> GetLeaveTypeDetails(int id)
     {
+        await AddBearerToken();
         var leaveType = await Client.LeaveTypesGETAsync(id);
         return mapper.Map<LeaveTypeVM>(leaveType);
     }
@@ -41,7 +43,7 @@ public class LeaveTypeService(
         }
         catch (ApiException e)
         {
-            return ConvertApiExceptions(e);
+            return ConvertApiExceptions<Guid>(e);
         }
     }
 
@@ -59,7 +61,7 @@ public class LeaveTypeService(
         }
         catch (ApiException e)
         {
-            return ConvertApiExceptions(e);
+            return ConvertApiExceptions<Guid>(e);
         }
     }
 
@@ -76,7 +78,7 @@ public class LeaveTypeService(
         }
         catch (ApiException e)
         {
-            return ConvertApiExceptions(e);
+            return ConvertApiExceptions<Guid>(e);
         }
     }
 }

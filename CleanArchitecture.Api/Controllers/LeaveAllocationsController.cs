@@ -11,7 +11,6 @@ namespace CleanArchitecture.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public class LeaveAllocationsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]

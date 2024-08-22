@@ -6,7 +6,7 @@ using MediatR;
 
 namespace CleanArchitecture.Application.Features.LeaveRequest.Commands.CancelLeaveRequest;
 
-public class CancelLeaveRequestCommandHandler(ILeaveRequestRepository leaveRequestRepository, IEmailSender emailSender)
+public class CancelLeaveRequestCommandHandler(ILeaveRequestRepository leaveRequestRepository, IEmailSender emailSender, ILeaveAllocationRepository leaveAllocationRepository)
     : IRequestHandler<CancelLeaveRequestCommand, Unit>
 {
     public async Task<Unit> Handle(CancelLeaveRequestCommand request, CancellationToken cancellationToken)
@@ -19,18 +19,36 @@ public class CancelLeaveRequestCommandHandler(ILeaveRequestRepository leaveReque
         }
         
         leaveRequest.Cancelled = true;
+        await leaveRequestRepository.UpdateAsync(leaveRequest);
         
-        // Re-evaluate the employee's allocations for the leave type
-        
-        // Send conformation email
-        var email = new EmailMessage
+        // If already approved, re-evaluate the employee's allocations for the leave type
+        if (leaveRequest.Approved == true)
         {
-            To = string.Empty,
-            Body = $"Your leave request for {leaveRequest.StartDate:D} to {leaveRequest.EndDate:D} has been cancelled.",
-            Subject = "Leave Request Cancelled"
-        };
+            var daysRequested = (int)(leaveRequest.EndDate - leaveRequest.StartDate).TotalDays;
+            var allocation =
+                await leaveAllocationRepository.GetUserAllocations(leaveRequest.RequestingEmployeeId, leaveRequest.LeaveTypeId);
+            allocation.NumberOfDays += daysRequested;
         
-        await emailSender.SendEmail(email);
+            await leaveAllocationRepository.UpdateAsync(allocation);
+        }
+        
+        try
+        {
+            // Send conformation email
+            var email = new EmailMessage
+            {
+                To = string.Empty,
+                Body = $"Your leave request for {leaveRequest.StartDate:D} to {leaveRequest.EndDate:D} has been cancelled.",
+                Subject = "Leave Request Cancelled"
+            };
+        
+            await emailSender.SendEmail(email);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
         
         return Unit.Value;
     }
