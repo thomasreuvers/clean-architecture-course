@@ -3,10 +3,15 @@ using CleanArchitecture.Application;
 using CleanArchitecture.Identity;
 using CleanArchitecture.Infrastructure;
 using CleanArchitecture.Persistence;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Host.UseSerilog((context, loggerConfig) => 
+    loggerConfig.WriteTo.Console()
+        .ReadFrom.Configuration(context.Configuration));
+
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
@@ -39,6 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseCors("all");

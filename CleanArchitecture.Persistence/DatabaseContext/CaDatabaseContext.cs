@@ -1,10 +1,11 @@
+using CleanArchitecture.Application.Contracts.Identity;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Persistence.DatabaseContext;
 
-public class CaDatabaseContext(DbContextOptions<CaDatabaseContext> options) : DbContext(options)
+public class CaDatabaseContext(DbContextOptions<CaDatabaseContext> options, IUserService userService) : DbContext(options)
 {
     public DbSet<LeaveType> LeaveTypes { get; set; }
     public DbSet<LeaveAllocation> LeaveAllocations { get; set; }
@@ -22,10 +23,12 @@ public class CaDatabaseContext(DbContextOptions<CaDatabaseContext> options) : Db
                      .Where(q => q.State is EntityState.Added or EntityState.Modified))
         {
             entry.Entity.DateModified = DateTime.Now;
-
+            entry.Entity.ModifiedBy = userService.UserId;
+            
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.DateCreated = DateTime.Now;
+                entry.Entity.CreatedBy = userService.UserId;
             }
         }
         
